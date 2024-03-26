@@ -9,8 +9,22 @@ class Project extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'due_date' => 'datetime',
+    ];
+
     public function tasks()
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }
