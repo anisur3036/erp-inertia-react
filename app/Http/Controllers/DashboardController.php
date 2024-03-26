@@ -11,8 +11,8 @@ class DashboardController extends Controller
     public function index()
     {
         $users = User::query()
-            ->when(request('search'), fn ($query) => $query->where('name','LIKE','%'. request('search') .'%'))
-            ->latest()
+            // ->latest()
+            ->when(request('search'), fn ($query) => $query->where('name','LIKE', '%'. request('search') .'%'))
             ->paginate(request()->perpage ?? 10);
 
         return inertia('Dashboard', [
