@@ -18,6 +18,7 @@ class ProjectController extends Controller
         $projects = Project::query()
             ->when(request('name', ''), fn($query) => $query->where('name','like','%'. request('name') .'%'))
             ->when(request('status'), fn($query) => $query->where('status', request('status')))
+            ->orderBy(request('sort_field', 'name'), request('direction', 'asc'))
             ->paginate(10);
 
         return Inertia::render("Projects/Index", [

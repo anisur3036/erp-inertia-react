@@ -6,6 +6,7 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
 import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SelectInput from "@/Components/SelectInput";
+import TableHeading from "@/Components/TableHeading";
 
 export default function Index({ auth, projects, queryParams = null }) {
   queryParams = queryParams || {};
@@ -16,12 +17,26 @@ export default function Index({ auth, projects, queryParams = null }) {
       delete queryParams[name];
     }
 
-    router.get(route("projects.index", queryParams));
+    router.get(route("projects.index"), queryParams);
   };
 
   const onKeyPress = (name, e) => {
     if (e.key !== "Enter") return;
     searchFieldChanged(name, e.target.value);
+  };
+
+  const sortBy = (name) => {
+    if (name === queryParams.sort_field) {
+      if (queryParams.direction === "asc") {
+        queryParams.direction = "desc";
+      } else {
+        queryParams.direction = "asc";
+      }
+    } else {
+      queryParams.sort_field = name;
+      queryParams.direction = "asc";
+    }
+    router.get(route("projects.index"), queryParams);
   };
 
   return (
@@ -41,7 +56,7 @@ export default function Index({ auth, projects, queryParams = null }) {
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <div className="flex items-center justify-between my-4">
                 <TextInput
-                  onBlur={(e) => searchFieldChanged("name", e)}
+                  onBlur={(e) => searchFieldChanged("name", e.target.value)}
                   onKeyPress={(e) => onKeyPress("name", e)}
                   defaultValue={queryParams.name}
                   className="py-2 px-4 w-1/2"
@@ -67,20 +82,47 @@ export default function Index({ auth, projects, queryParams = null }) {
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                   <tr className="text-no2rap">
-                    <th className="px-3 py-2">
-                      <div className="flex items-center justify-between gap-1 cursor-pointer">
-                        ID
-                        <div>
-                          <ChevronUpIcon className="w-4" />
-                          <ChevronDownIcon className="w-4" />
-                        </div>
-                      </div>
-                    </th>
+                    <TableHeading
+                      name="id"
+                      sort_field={queryParams.sort_field}
+                      direction={queryParams.direction}
+                      sortBy={sortBy}
+                    >
+                      ID
+                    </TableHeading>
                     <th className="px-3 py-2">Image</th>
-                    <th className="px-3 py-2">Name</th>
-                    <th className="px-3 py-2">Status</th>
-                    <th className="px-3 py-2">Created Date</th>
-                    <th className="px-3 py-2">Due Date</th>
+                    <TableHeading
+                      name="name"
+                      sort_field={queryParams.sort_field}
+                      direction={queryParams.direction}
+                      sortBy={sortBy}
+                    >
+                      Name
+                    </TableHeading>
+                    <TableHeading
+                      name="status"
+                      sort_field={queryParams.sort_field}
+                      direction={queryParams.direction}
+                      sortBy={sortBy}
+                    >
+                      Status
+                    </TableHeading>
+                    <TableHeading
+                      name="created_at"
+                      sort_field={queryParams.sort_field}
+                      direction={queryParams.direction}
+                      sortBy={sortBy}
+                    >
+                      Create date
+                    </TableHeading>
+                    <TableHeading
+                      name="due_date"
+                      sort_field={queryParams.sort_field}
+                      direction={queryParams.direction}
+                      sortBy={sortBy}
+                    >
+                      Due Date
+                    </TableHeading>
                     <th className="px-3 py-2">Created By</th>
                     <th className="px-3 py-2 text-right">Actions</th>
                   </tr>
