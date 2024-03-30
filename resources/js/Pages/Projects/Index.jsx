@@ -2,13 +2,28 @@ import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { PROJECT_STATUS_TEXT_MAP } from "@/lib/constants";
 import { Head, Link, router } from "@inertiajs/react";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
+import { PlusIcon } from "@heroicons/react/16/solid";
 import TextInput from "@/Components/TextInput";
-import PrimaryButton from "@/Components/PrimaryButton";
 import SelectInput from "@/Components/SelectInput";
 import TableHeading from "@/Components/TableHeading";
+import { useState } from "react";
+import NavLink from "@/Components/NavLink";
 
-export default function Index({ auth, projects, queryParams = null }) {
+export default function Index({ auth, projects, queryParams = null, success }) {
+  let [openModal, setOpenModal] = useState(false);
+
+  const closeModal = () => {
+    setOpenModal(false);
+  };
+
+  const modalOpen = () => {
+    setOpenModal(true);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   queryParams = queryParams || {};
   const searchFieldChanged = (name, value) => {
     if (value) {
@@ -49,6 +64,9 @@ export default function Index({ auth, projects, queryParams = null }) {
       }
     >
       <Head title="Projects" />
+      {success && (
+        <div className="bg-green-500 py-2 px-4 text-white">{success}</div>
+      )}
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -75,7 +93,9 @@ export default function Index({ auth, projects, queryParams = null }) {
                     <option value="in_progress">In Progress</option>
                     <option value="completed">Completed</option>
                   </SelectInput>
-                  <PrimaryButton>New</PrimaryButton>
+                  <NavLink href="/projects/create">
+                    <PlusIcon className="w-4" /> New
+                  </NavLink>
                 </div>
               </div>
 

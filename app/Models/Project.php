@@ -9,6 +9,16 @@ class Project extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+    'image_path',
+    'name',
+    'due_date',
+    'description',
+    'status',
+    'created_by',
+    'updated_by',
+    ];
+
     protected $casts = [
         'due_date' => 'datetime',
     ];
